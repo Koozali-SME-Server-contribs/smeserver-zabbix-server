@@ -1,0 +1,16 @@
+# Listen port for trapper. Default port number is 10051. This parameter 
+# must be between 1024 and 32767
+{
+my $port = ${'zabbix-server'}{'TCPPort'} || '10051';
+$OUT .= "ListenPort=$port\n";
+}
+
+# Source IP address for outgouing connections
+#SourceIP=
+
+# Listen interface for trapper. Trapper will listen all network interfaces
+# if this parameter is missing.
+
+#ListenIP=127.0.0.1
+
+

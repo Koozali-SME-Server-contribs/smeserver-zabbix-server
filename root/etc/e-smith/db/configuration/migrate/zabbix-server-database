@@ -1,0 +1,38 @@
+{
+    my $rec = $DB->get('zabbix-server')
+        || $DB->new_record('zabbix-server', {type => 'service'});
+    my $pw = $rec->prop('DbPassword');
+    if (not $pw or length($pw) < 57)
+    {   
+        use MIME::Base64 qw(encode_base64);
+
+        $pw = "not set due to error";
+        if ( open( RANDOM, "/dev/urandom" ) )
+        {   
+            my $buf;
+            # 57 bytes is a full line of Base64 coding, and contains
+            # 456 bits of randomness - given a perfectly random /dev/random
+            if ( read( RANDOM, $buf, 57 ) != 57 )
+            {   
+                warn("Short read from /dev/random: $!");
+            }
+            else
+            {   
+                $pw = encode_base64($buf);
+                chomp $pw;
+            }
+            close RANDOM;
+        }
+        else
+        {   
+            warn "Could not open /dev/urandom: $!";
+        }
+        $rec->set_prop('DbPassword', $pw);
+    }
+
+    my $AdminPass = $rec->prop('AdminPassword') ||
+        $rec->set_prop('AdminPassword', `/usr/bin/openssl rand -base64 15 | /usr/bin/tr -c -d '[:graph:]'`);
+
+
+}     
+

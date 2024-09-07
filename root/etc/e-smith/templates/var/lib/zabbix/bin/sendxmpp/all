@@ -1,0 +1,6 @@
+
+echo "$3" | \
+    sendxmpp -r zabbix -f /var/lib/zabbix/.sendxmpprc \
+	{(${'zabbix-server'}{'JabberTLS'} || 'enabled') eq 'disabled' ? '':'-t \\';}
+	-s "$2" "$1"
+

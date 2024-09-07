@@ -1,0 +1,35 @@
+# Number of pre-forked instances of pollers
+# Default value is 5
+# This parameter must be between 0 and 255
+StartPollers=5
+
+# Number of pre-forked instances of IPMI pollers
+# Default value is 0
+# This parameter must be between 0 and 255
+#StartIPMIPollers=0
+
+# Number of pre-forked instances of pollers for unreachable hosts
+# Default value is 1
+# This parameter must be between 0 and 255
+#StartPollersUnreachable=1
+
+# Number of pre-forked instances of trappers
+# Default value is 5
+# This parameter must be between 0 and 255
+StartTrappers=5
+
+# Number of pre-forked instances of ICMP pingers
+# Default value is 1
+# This parameter must be between 0 and 255
+StartPingers=1
+
+# Number of pre-forked instances of discoverers
+# Default value is 1
+# This parameter must be between 0 and 255
+StartDiscoverers=1
+
+# Number of pre-forked instances of HTTP pollers
+# Default value is 1
+# This parameter must be between 0 and 255
+#StartHTTPPollers=1
+

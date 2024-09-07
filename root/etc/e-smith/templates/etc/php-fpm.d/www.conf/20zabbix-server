@@ -1,0 +1,60 @@
+{
+if ($PHP_VERSION eq '74'){
+  if ((${'zabbix-server'}{status} || 'disabled') eq 'enabled'){
+    my $id = 'zabbix-server';
+    my $openbasedir = '/usr/share/zabbix:/var/cache/zabbix/:/var/run/php-fpm/:/var/lib/php/zabbix/' .
+	':/var/lock/zabbix/:/etc/zabbix/:/usr/share/php/:/usr/share/pear/:/opt/remi/php74/root/usr/share/pear/' .
+	':/opt/remi/php74/root/usr/share/php/';
+    $disablefunctions = 'system, show_source, symlink, exec, dl, shell_exec, passthru, phpinfo, ' . 
+            'escapeshellarg, escapeshellcmd';
+
+$socket = ( -d "/var/lib/mysql/zabbixdb") ? "/var/lib/mysql/mysql.sock" : "/var/lib/mysql/mariadb105.sock";
+
+    $OUT .=<<_EOF;
+
+[php$PHP_VERSION-$id]
+user = www
+group = www
+listen.owner = root
+listen.group = www
+listen.mode = 0660
+listen = /var/run/php-fpm/php$PHP_VERSION-$id.sock
+pm = dynamic
+pm.max_children = 15
+pm.start_servers = 3
+pm.min_spare_servers = 3
+pm.max_spare_servers = 4
+pm.max_requests = 1000
+request_terminate_timeout = 30
+php_admin_value[session.save_path] = /var/lib/php/zabbix/session
+php_admin_value[opcache.file_cache]  = /var/lib/php/zabbix/opcache
+php_admin_value[upload_tmp_dir] = /var/lib/php/zabbix/tmp
+php_admin_value[error_log] = /var/log/php/zabbix/error.log
+slowlog = /var/log/php/zabbix/slow.log
+php_admin_value[sendmail_path] = /usr/sbin/sendmail -t -i -f php@{ $DomainName }
+php_admin_flag[display_errors] = off
+php_admin_flag[log_errors] = on
+php_admin_value[error_log] = syslog
+php_admin_value[memory_limit] = 256M
+php_admin_value[max_execution_time] = 600
+php_admin_value[max_input_time] = 600
+php_admin_value[post_max_size] = 32M
+php_admin_value[upload_max_filesize] = 16M
+php_admin_value[disable_functions] = $disablefunctions
+php_admin_value[open_basedir] = $openbasedir
+php_admin_flag[allow_url_fopen] = on
+php_admin_flag[file_upload] = off
+php_admin_flag[session.cookie_httponly] = on
+php_admin_flag[allow_url_include] = off
+php_admin_value[session.save_handler] = files
+php_admin_value[always_populate_raw_post_data] = -1
+php_value[mysqli.default_socket] = $socket
+php_value[mysql.default_socket] = $socket
+
+_EOF
+  }
+  else{
+    $OUT .= '; Zabbix Server is disabled';
+  }
+}
+}

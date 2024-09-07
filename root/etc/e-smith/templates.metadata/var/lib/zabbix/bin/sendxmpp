@@ -1,0 +1,4 @@
+PERMS=0750
+UID="root"
+GID="zabbix"
+

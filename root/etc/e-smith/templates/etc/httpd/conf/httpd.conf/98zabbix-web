@@ -1,0 +1,45 @@
+{
+if (
+	((${'zabbix-server'}{'status'} || 'disabled') eq 'enabled') &&
+	((${'zabbix-server'}{'WebAccess'} || 'local') ne 'disabled')){
+
+my $access = (${'zabbix-server'}{'WebAccess'} || 'local') eq 'public' ?
+        'all granted':"ip $localAccess $externalSSLAccess";
+
+my $tz = ${'TimeZone'} || 'Europe/Paris';
+
+$OUT .=<<"HERE";
+#-------------------------------------------#
+# Zabbix monitoring system php web frontend #
+#-------------------------------------------#
+
+Alias /zabbix /usr/share/zabbix
+
+<Directory "/usr/share/zabbix">
+    SSLRequireSSL on
+    Options FollowSymLinks
+    AllowOverride None
+    #AddType application/x-httpd-php .php
+    <FilesMatch .php>
+	SetHandler "proxy:unix:/var/run/php-fpm/php74-zabbix-server.sock|fcgi://localhost"
+    </FilesMatch>
+    Require $access
+</Directory>
+
+<Directory "/usr/share/zabbix/include">
+    Require all denied
+    <files *.php>
+        Require all denied
+    </files>
+</Directory>
+
+<Directory "/usr/share/zabbix/include/classes">
+    Require all denied
+    <files *.php>
+        Require all denied
+    </files>
+</Directory>
+
+HERE
+}
+}

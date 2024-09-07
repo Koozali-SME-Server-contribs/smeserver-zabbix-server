@@ -1,0 +1,10 @@
+{
+my $port = ${'zabbix-server'}{'TCPPort'} || '10051';
+
+$OUT .=<<"HERE";
+
+\$ZBX_SERVER             = "localhost";
+\$ZBX_SERVER_PORT        = "$port";
+HERE
+}
+

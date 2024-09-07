@@ -1,0 +1,15 @@
+# How often ZABBIX will perform housekeeping procedure
+# (in hours)
+# Default value is 1 hour
+# Housekeeping is removing unnecessary information from
+# tables history, alert, and alarms
+# This parameter must be between 1 and 24
+
+#HousekeepingFrequency=1
+
+# Uncomment this line to disable housekeeping procedure
+#DisableHousekeeping=1
+
+# Frequency of ICMP pings (item keys 'icmpping' and 'icmppingsec'). Defauls is 60 seconds.
+#PingerFrequency=60
+

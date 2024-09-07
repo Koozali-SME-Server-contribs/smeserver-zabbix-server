@@ -1,0 +1,7 @@
+{
+
+    if ($port ne ${modSSL}{'TCPPort'}){
+	$OUT = '    RewriteRule ^/zabbix(/.*|$)    https://%{HTTP_HOST}/zabbix$1 [L,R]';
+    }
+}
+

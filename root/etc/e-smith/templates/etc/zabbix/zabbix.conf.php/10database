@@ -1,0 +1,20 @@
+global $DB;
+
+$DB["TYPE"]             = "MYSQL";
+$DB["SERVER"]           = "localhost";
+$DB["PORT"]             = "0";
+
+{
+
+my $dbname = ${'zabbix-server'}{'DbName'} || 'zabbix';
+my $dbuser = ${'zabbix-server'}{'DbUser'} || 'zabbix';
+my $dbpass = ${'zabbix-server'}{'DbPassword'} || 'secret';
+
+$OUT .=<<"HERE";
+
+\$DB["DATABASE"]         = "$dbname";
+\$DB["USER"]             = "$dbuser";
+\$DB["PASSWORD"]         = "$dbpass";
+HERE
+}
+

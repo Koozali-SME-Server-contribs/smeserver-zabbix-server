@@ -1,0 +1,11 @@
+############ GENERAL PARAMETERS #################
+
+#NodeID dropped since Zabbix 2.40
+{
+# This defines unique NodeID in distributed setup,
+# Default value 0 (standalone server)
+# This parameter must be between 0 and 999
+#my $nodeID = ${'zabbix-server'}{'NodeID'} || '0';
+#$OUT .= "NodeID=$nodeID\n";
+}
+

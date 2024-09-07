@@ -1,0 +1,17 @@
+# Location for custom alert scripts
+AlertScriptsPath=/var/lib/zabbix/bin
+
+# Location of external scripts
+ExternalScripts=/var/lib/zabbix/bin
+
+# Location of fping. Default is /usr/sbin/fping
+# Make sure that fping binary has root permissions and SUID flag set
+FpingLocation=/var/lib/zabbix/bin/fping
+
+# Location of fping6. Default is /usr/sbin/fping6
+# Make sure that fping binary has root permissions and SUID flag set
+Fping6Location=/var/lib/zabbix/bin/fping6
+
+# Temporary directory. Default is /tmp
+TmpDir=/var/lib/zabbix/tmp
+

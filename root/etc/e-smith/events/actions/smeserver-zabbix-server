@@ -1,0 +1,3 @@
+systemctl daemon-reload
+systemsctl preset-all
+systemsctl restart zabbix-server

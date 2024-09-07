@@ -1,0 +1,3 @@
+# Jabber Account for zabbix alerts
+{${'zabbix-server'}{'JabberAccount'}}@{${'zabbix-server'}{'JabberServer'}} {${'zabbix-server'}{'JabberPassword'}}
+

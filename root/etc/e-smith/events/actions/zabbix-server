@@ -1,0 +1,7 @@
+#!/bin/bash
+# restart mysql.init
+/usr/bin/systemctl stop zabbix-server  1>/dev/null
+/usr/bin/systemctl restart mariadb105-mysql.init  1>/dev/null
+/usr/bin/systemctl start zabbix-server 1>/dev/null
+exit 0
+

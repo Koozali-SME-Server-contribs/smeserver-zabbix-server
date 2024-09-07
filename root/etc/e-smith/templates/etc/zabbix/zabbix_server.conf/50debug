@@ -1,0 +1,9 @@
+# Specifies debug level
+# 0 - debug is not created
+# 1 - critical information
+# 2 - error information
+# 3 - warnings (default)
+# 4 - for debugging (produces lots of information)
+
+DebugLevel=3
+

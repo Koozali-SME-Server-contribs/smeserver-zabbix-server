@@ -1,0 +1,75 @@
+#!/usr/bin/perl -w
+
+use esmith::Build::CreateLinks  qw(:all);
+
+my $event = 'zabbix-server-update';
+
+# Templates to expand
+templates2events("/etc/httpd/conf/httpd.conf", $event);
+templates2events("/etc/zabbix/zabbix_server.conf", qw(zabbix-server-update bootstrap-console-save));
+templates2events("/etc/zabbix/zabbix.conf.php", qw(zabbix-server-update bootstrap-console-save));
+
+
+# new path with zabbix 4.4.6
+templates2events("/etc/zabbix/web/zabbix.conf.php", qw(zabbix-server-update bootstrap-console-save));
+templates2events("/etc/sudoers", $event);
+templates2events("/var/lib/zabbix/bin/sendxmpp", $event);
+templates2events("/var/lib/zabbix/.sendxmpprc", $event);
+templates2events("/etc/e-smith/sql/init105/80zabbix-server", qw(zabbix-server-update bootstrap-console-save));
+templates2events("/etc/rc.d/init.d/masq", $event);
+
+# Services to restart
+#safe_symlink("restart", "root/etc/e-smith/events/$event/services2adjust/mysql.init");
+safe_symlink("sigusr1", "root/etc/e-smith/events/$event/services2adjust/httpd-e-smith");
+safe_symlink("restart", "root/etc/e-smith/events/$event/services2adjust/zabbix-server");
+safe_symlink("adjust", "root/etc/e-smith/events/$event/services2adjust/masq");
+safe_symlink("/etc/e-smith/events/actions/zabbix-server","root/etc/e-smith/events/$event/50zabbix-server");
+
+# PHP header and footer
+safe_symlink("/etc/e-smith/templates-default/template-begin-php", "root/etc/e-smith/templates/etc/zabbix/zabbix.conf.php/template-begin");
+safe_symlink("/etc/e-smith/templates-default/template-end-php", "root/etc/e-smith/templates/etc/zabbix/zabbix.conf.php/template-end");
+
+# Bash header
+safe_symlink("/etc/e-smith/templates-default/template-begin-shell", "root/etc/e-smith/templates/var/lib/zabbix/bin/sendxmpp/template-begin");
+
+# Start and stop links - sysV
+#service_link_enhanced("zabbix-server", "S99", "7");
+#service_link_enhanced("zabbix-server", "K10", "6");
+#service_link_enhanced("zabbix-server", "K10", "0");
+
+#Systemd start stop
+# rpm update action (invoked by yum on install and update
+$contrib = "smeserver-zabbix-server";
+safe_symlink("/etc/e-smith/events/$contrib-update", "root/etc/e-smith/events/$contrib-z50-update");
+event_actions("$contrib-update", qw(
+  systemd-default 88
+  systemd-reload 89
+  zabbix-server 92
+));
+
+event_templates("$contrib-update", qw(
+  /etc/httpd/conf/httpd.conf
+  /etc/crontab
+  /etc/rc.d/init.d/masq
+  /etc/sudoers
+  /etc/e-smith/sql/init105/80zabbix-server
+  /etc/zabbix/zabbix.conf.php
+  /etc/zabbix/web/zabbix.conf.php
+  /var/lib/zabbix/bin/sendxmpp
+  /etc/zabbix/zabbix_server.conf
+  /usr/share/zabbix/.user.ini
+  /etc/systemd/system-preset/49-koozali.preset
+  /etc/opt/remi/php74/php-fpm.d/www.conf
+  /etc/backup-data.d/smeserver-zabbix-server.include
+
+));
+
+event_services("$contrib-update", qw(
+  httpd-e-smith sigusr1
+  php74-php-fpm  reload
+  masq		 adjust
+));
+
+#zabbix server 92 will stop zabbix, restart mariadb105-mysql.init and start zabbix
+#that is why those services are not listed in event_service. order matter.
+#also this is at the end to be sure that mariadb105 is installed and running

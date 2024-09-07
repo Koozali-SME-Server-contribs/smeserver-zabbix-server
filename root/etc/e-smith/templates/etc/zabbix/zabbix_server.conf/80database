@@ -1,0 +1,36 @@
+# Database host name
+# Default is localhost
+
+DBHost=localhost
+
+# Database name
+# SQLite3 note: path to database file must be provided. DBUser and DBPassword are ignored.
+{
+my $dbname = ${'zabbix-server'}{'DbName'} || 'zabbix';
+my $dbuser = ${'zabbix-server'}{'DbUser'} || 'zabbix';
+my $dbpass = ${'zabbix-server'}{'DbPassword'} || 'secret';
+
+$OUT .=<<"HERE";
+
+DBName=$dbname
+
+# Database user
+
+DBUser=$dbuser
+
+# Database password
+# Comment this line if no password used
+
+DBPassword=$dbpass
+HERE
+
+}
+
+# Connect to MySQL using Unix socket?
+
+#DBSocket=/var/lib/mysql/mysql.sock
+DBSocket=/var/lib/mysql/{$OUT = ( -d "/var/lib/mysql/zabbixdb") ? "mysql" : "mariadb105"}.sock
+
+# Enable database cache module
+StartDBSyncers=1
+
