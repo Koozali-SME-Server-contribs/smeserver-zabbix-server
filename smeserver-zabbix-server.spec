@@ -4,7 +4,7 @@
 
 %define name smeserver-zabbix-server
 %define version 0.1
-%define release 32
+%define release 33
 Summary: sme server integration of zabbix server and web front-end
 Name: %{name}
 Version: %{version}
@@ -16,10 +16,10 @@ Source: %{name}-%{version}.tar.xz
 
 
 BuildArchitectures: noarch
-BuildRequires: e-smith-devtools
+BuildRequires: smeserver-devtools
 BuildRoot: /var/tmp/%{name}-%{version}
-Requires: e-smith-release >= 10.0
-Requires: e-smith-apache >= 2.6.0-19
+Requires: smeserver-release >= 10.0
+Requires: smeserver-apache >= 2.6.0-19
 Requires: smeserver-php >= 3.0.0-43
 Requires: fping
 Requires: zabbix-server-mysql >= 4.4.6
@@ -46,9 +46,9 @@ Summary: SME Server integration of zabbix server 5.0 and web front-end using Rem
 Group:    Applications/Internet
 #common
 BuildArchitectures: noarch
-BuildRequires: e-smith-devtools
-Requires: e-smith-release >= 10.0
-Requires: e-smith-apache >= 2.6.0-19
+BuildRequires: smeserver-devtools
+Requires: smeserver-release >= 10.0
+Requires: smeserver-apache >= 2.6.0-19
 Requires: smeserver-php >= 3.0.0-43
 Requires: fping
 Requires: zabbix-server-mysql >= 5.0.0
@@ -71,6 +71,9 @@ Zabbix is an entreprise-class open source distributed monitoring
 solution
 
 %changelog
+* Sun Sep 08 2024 fix-e-smith-pkg.sh by Trevor Batley <trevor@batley.id.au> 0.1-33.sme
+- Fix e-smith references in smeserver-zabbix-server [SME: 12732]
+
 * Sat Sep 07 2024 cvs2git.sh aka Brian Read <brianr@koozali.org> 0.1-32.sme
 - Roll up patches and move to git repo [SME: 12338]
 
