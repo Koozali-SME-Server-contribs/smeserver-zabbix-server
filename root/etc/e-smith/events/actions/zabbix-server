@@ -1,7 +1,17 @@
 #!/bin/bash
 # restart mysql.init
+event=$1
+
+if [[ $i == "post-upgrade" ]] ; then
+  exit 0
+fi
+
+if [[ $i == "bootstrap-console-save" ]] ; then
+  exit 0
+fi
+
 /usr/bin/systemctl stop zabbix-server  1>/dev/null
-/usr/bin/systemctl restart mariadb105-mysql.init  1>/dev/null
+/usr/bin/systemctl restart mysql.init  1>/dev/null
 /usr/bin/systemctl start zabbix-server 1>/dev/null
 exit 0
 

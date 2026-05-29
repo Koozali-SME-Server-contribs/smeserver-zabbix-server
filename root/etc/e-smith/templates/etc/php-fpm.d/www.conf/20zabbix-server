@@ -1,14 +1,15 @@
 {
-if ($PHP_VERSION eq '74'){
+if ($PHP_VERSION eq '84'){
   if ((${'zabbix-server'}{status} || 'disabled') eq 'enabled'){
     my $id = 'zabbix-server';
     my $openbasedir = '/usr/share/zabbix:/var/cache/zabbix/:/var/run/php-fpm/:/var/lib/php/zabbix/' .
-	':/var/lock/zabbix/:/etc/zabbix/:/usr/share/php/:/usr/share/pear/:/opt/remi/php74/root/usr/share/pear/' .
-	':/opt/remi/php74/root/usr/share/php/';
+	':/var/lock/zabbix/:/etc/zabbix/:/usr/share/php/:/usr/share/pear/:/opt/remi/php84/root/usr/share/pear/' .
+	':/opt/remi/php84/root/usr/share/php/';
     $disablefunctions = 'system, show_source, symlink, exec, dl, shell_exec, passthru, phpinfo, ' . 
             'escapeshellarg, escapeshellcmd';
 
-$socket = ( -d "/var/lib/mysql/zabbixdb") ? "/var/lib/mysql/mysql.sock" : "/var/lib/mysql/mariadb105.sock";
+#$socket = ( -d "/var/lib/mysql/zabbixdb") ? "/var/lib/mysql/mysql.sock" : "/var/lib/mysql/mariadb105.sock";
+$socket = "/var/lib/mysql/mysql.sock";
 
     $OUT .=<<_EOF;
 
@@ -29,11 +30,13 @@ request_terminate_timeout = 30
 php_admin_value[session.save_path] = /var/lib/php/zabbix/session
 php_admin_value[opcache.file_cache]  = /var/lib/php/zabbix/opcache
 php_admin_value[upload_tmp_dir] = /var/lib/php/zabbix/tmp
+php_admin_value[sys_temp_dir] =  /var/lib/php/zabbix/tmp
 php_admin_value[error_log] = /var/log/php/zabbix/error.log
 slowlog = /var/log/php/zabbix/slow.log
 php_admin_value[sendmail_path] = /usr/sbin/sendmail -t -i -f php@{ $DomainName }
 php_admin_flag[display_errors] = off
 php_admin_flag[log_errors] = on
+php_admin_value[error_reporting] = E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT
 php_admin_value[error_log] = syslog
 php_admin_value[memory_limit] = 256M
 php_admin_value[max_execution_time] = 600
@@ -46,10 +49,13 @@ php_admin_flag[allow_url_fopen] = on
 php_admin_flag[file_upload] = off
 php_admin_flag[session.cookie_httponly] = on
 php_admin_flag[allow_url_include] = off
-php_admin_value[session.save_handler] = files
+; this is imcompatible with zabbix 7.0 https://support.zabbix.com/si/jira.issueviews:issue-html/ZBX-24992/ZBX-24992.html
+;php_admin_value[session.save_handler] = files
 php_admin_value[always_populate_raw_post_data] = -1
 php_value[mysqli.default_socket] = $socket
 php_value[mysql.default_socket] = $socket
+php_value[zlib.output_compression] = Off
+php_value[zlib.output_compression_level] = -1
 
 _EOF
   }

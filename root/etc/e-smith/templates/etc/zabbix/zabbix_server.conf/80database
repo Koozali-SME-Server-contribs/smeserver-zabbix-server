@@ -28,8 +28,7 @@ HERE
 
 # Connect to MySQL using Unix socket?
 
-#DBSocket=/var/lib/mysql/mysql.sock
-DBSocket=/var/lib/mysql/{$OUT = ( -d "/var/lib/mysql/zabbixdb") ? "mysql" : "mariadb105"}.sock
+DBSocket=/var/lib/mysql/mysql.sock
 
 # Enable database cache module
 StartDBSyncers=1

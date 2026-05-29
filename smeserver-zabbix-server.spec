@@ -4,7 +4,7 @@
 
 %define name smeserver-zabbix-server
 %define version 0.1
-%define release 33
+%define release 34
 Summary: sme server integration of zabbix server and web front-end
 Name: %{name}
 Version: %{version}
@@ -18,18 +18,25 @@ Source: %{name}-%{version}.tar.xz
 BuildArchitectures: noarch
 BuildRequires: smeserver-devtools
 BuildRoot: /var/tmp/%{name}-%{version}
-Requires: smeserver-release >= 10.0
-Requires: smeserver-apache >= 2.6.0-19
-Requires: smeserver-php >= 3.0.0-43
+Requires: smeserver-release >= 11
+Requires: smeserver-apache >= 11
+Requires: smeserver-php >= 11
 Requires: fping
-Requires: zabbix-server-mysql >= 4.4.6
-Requires: zabbix-web-mysql >= 4.4.6
-Requires: zabbix-web >= 4.4.6
+Requires: zabbix-server-mysql >= 7.0.1
+Requires: zabbix-sql-scripts
+# this will force pulling it from zabbix repo not from EPEL
+Requires: /usr/share/doc/zabbix-web/AUTHORS
+Requires: /usr/share/doc/zabbix-web/COPYING
+Conflicts:  zabbix7.0 zabbix7.0-dbfiles-mysql zabbix7.0-selinux zabbix7.0-server zabbix7.0-server-mysql zabbix7.0-web zabbix7.0-web-mysql
+Conflicts:  zabbix8.0 zabbix8.0-dbfiles-mysql zabbix8.0-selinux zabbix8.0-server zabbix8.0-server-mysql zabbix8.0-web zabbix8.0-web-mysql
+Requires: zabbix-web-mysql >= 7.0.1
+Requires: zabbix-web >= 7.0.1
 Requires: sendxmpp
 Requires: smeserver-remoteuseraccess
-Requires: smeserver-mariadb105
 # for telegram bot
-Requires: python2-pysocks python-requests python2-requests-oauthlib
+Requires: python2-pysocks python2-requests 
+#python2-requests-oauthlib
+Requires: python3-pysocks python3-requests python3-requests-oauthlib
 Obsoletes: zabbix-server
 Conflicts: smeserver-zabbix-proxy
 AutoReqProv: no
@@ -39,38 +46,12 @@ smserver integration of zabbix server and web front-end.
 Zabbix is an entreprise-class open source distributed monitoring
 solution
 
-%package z50
-%define provscl 5.0.30-1.el7
-#5.0.30-1
-Summary: SME Server integration of zabbix server 5.0 and web front-end using Remi SCLO
-Group:    Applications/Internet
-#common
-BuildArchitectures: noarch
-BuildRequires: smeserver-devtools
-Requires: smeserver-release >= 10.0
-Requires: smeserver-apache >= 2.6.0-19
-Requires: smeserver-php >= 3.0.0-43
-Requires: fping
-Requires: zabbix-server-mysql >= 5.0.0
-#Requires: zabbix-web-mysql-scl >= 5.0.0
-#Requires: zabbix-web >= 5.0.0
-Requires: sendxmpp
-Requires: smeserver-remoteuseraccess
-Requires: smeserver-mariadb105
-# specific
-#Provides: rh-php72-php-fpm rh-php72-php-mbstring rh-php72 rh-php72-php-mysqlnd rh-php72-php-gd rh-php72-php-xml rh-php72-php-ldap rh-php72-php-bcmath
-Provides: zabbix-web-database-scl-php74 = %{provscl}
-Provides: zabbix-web-deps-scl =  %{provscl}
-Provides: zabbix-web-deps-scl-php73 = %{provscl}
-Requires: zabbix-web = %{provscl}
-Requires: php74-php-mysqlnd  php74 php74-php-gd php74-php-bcmath php74-php-mbstring php74-php-xml php74-php-ldap php74-php-fpm php74-php-mysqlnd
-
-%description z50
-SME Server integration of zabbix server 5.0 and web front-end using Remi SCLO.
-Zabbix is an entreprise-class open source distributed monitoring
-solution
-
 %changelog
+* Thu May 28 2026 Jean-Philippe Pialasse <jpp@koozali.org> 0.1-34.sme
+- import to SME11
+- use php 8.4, fix php-fpm, mariadb 11.4
+- set headers including CSP and referer
+
 * Sun Sep 08 2024 fix-e-smith-pkg.sh by Trevor Batley <trevor@batley.id.au> 0.1-33.sme
 - Fix e-smith references in smeserver-zabbix-server [SME: 12732]
 
@@ -230,9 +211,6 @@ rm -f %{name}-%{version}-filelist
 	> %{name}-%{version}-filelist
 
 %files -f %{name}-%{version}-filelist
-%defattr(-,root,root)
-
-%files z50 -f %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %clean

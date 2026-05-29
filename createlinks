@@ -15,7 +15,7 @@ templates2events("/etc/zabbix/web/zabbix.conf.php", qw(zabbix-server-update boot
 templates2events("/etc/sudoers", $event);
 templates2events("/var/lib/zabbix/bin/sendxmpp", $event);
 templates2events("/var/lib/zabbix/.sendxmpprc", $event);
-templates2events("/etc/e-smith/sql/init105/80zabbix-server", qw(zabbix-server-update bootstrap-console-save));
+templates2events("/etc/e-smith/sql/init/80zabbix-server", qw(zabbix-server-update bootstrap-console-save));
 templates2events("/etc/rc.d/init.d/masq", $event);
 
 # Services to restart
@@ -40,7 +40,7 @@ safe_symlink("/etc/e-smith/templates-default/template-begin-shell", "root/etc/e-
 #Systemd start stop
 # rpm update action (invoked by yum on install and update
 $contrib = "smeserver-zabbix-server";
-safe_symlink("/etc/e-smith/events/$contrib-update", "root/etc/e-smith/events/$contrib-z50-update");
+#safe_symlink("/etc/e-smith/events/$contrib-update", "root/etc/e-smith/events/$contrib-z50-update");
 event_actions("$contrib-update", qw(
   systemd-default 88
   systemd-reload 89
@@ -52,21 +52,21 @@ event_templates("$contrib-update", qw(
   /etc/crontab
   /etc/rc.d/init.d/masq
   /etc/sudoers
-  /etc/e-smith/sql/init105/80zabbix-server
+  /etc/e-smith/sql/init/80zabbix-server
   /etc/zabbix/zabbix.conf.php
   /etc/zabbix/web/zabbix.conf.php
   /var/lib/zabbix/bin/sendxmpp
   /etc/zabbix/zabbix_server.conf
   /usr/share/zabbix/.user.ini
   /etc/systemd/system-preset/49-koozali.preset
-  /etc/opt/remi/php74/php-fpm.d/www.conf
+  /etc/opt/remi/php84/php-fpm.d/www.conf
   /etc/backup-data.d/smeserver-zabbix-server.include
 
 ));
 
 event_services("$contrib-update", qw(
   httpd-e-smith sigusr1
-  php74-php-fpm  reload
+  php84-php-fpm  reload
   masq		 adjust
 ));
 

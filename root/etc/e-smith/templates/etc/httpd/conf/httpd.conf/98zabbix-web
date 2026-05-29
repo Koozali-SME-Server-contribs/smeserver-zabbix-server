@@ -16,12 +16,14 @@ $OUT .=<<"HERE";
 Alias /zabbix /usr/share/zabbix
 
 <Directory "/usr/share/zabbix">
+Header set Content-Security-Policy: "default-src 'self' *.openstreetmap.org; script-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://services.zabbix.com ; img-src 'self' data: *.openstreetmap.org; style-src 'self' 'unsafe-inline'; base-uri 'self'; form-action 'self';"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
     SSLRequireSSL on
     Options FollowSymLinks
     AllowOverride None
     #AddType application/x-httpd-php .php
     <FilesMatch .php>
-	SetHandler "proxy:unix:/var/run/php-fpm/php74-zabbix-server.sock|fcgi://localhost"
+	SetHandler "proxy:unix:/var/run/php-fpm/php84-zabbix-server.sock|fcgi://localhost"
     </FilesMatch>
     Require $access
 </Directory>
