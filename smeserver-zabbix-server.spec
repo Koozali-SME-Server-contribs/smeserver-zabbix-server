@@ -4,7 +4,7 @@
 
 %define name smeserver-zabbix-server
 %define version 0.1
-%define release 34
+%define release 35
 Summary: sme server integration of zabbix server and web front-end
 Name: %{name}
 Version: %{version}
@@ -47,7 +47,7 @@ Zabbix is an entreprise-class open source distributed monitoring
 solution
 
 %changelog
-* Thu May 28 2026 Jean-Philippe Pialasse <jpp@koozali.org> 0.1-34.sme
+* Thu May 28 2026 Jean-Philippe Pialasse <jpp@koozali.org> 0.1-35.sme
 - import to SME11
 - use php 8.4, fix php-fpm, mariadb 11.4
 - set headers including CSP and referer
