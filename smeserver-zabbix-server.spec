@@ -4,7 +4,7 @@
 
 %define name smeserver-zabbix-server
 %define version 0.1
-%define release 35
+%define release 36
 Summary: sme server integration of zabbix server and web front-end
 Name: %{name}
 Version: %{version}
@@ -22,23 +22,26 @@ Requires: smeserver-release >= 11
 Requires: smeserver-apache >= 11
 Requires: smeserver-php >= 11
 Requires: fping
-Requires: zabbix-server-mysql >= 7.0.1
-Requires: zabbix-sql-scripts
-# this will force pulling it from zabbix repo not from EPEL
-Requires: /usr/share/doc/zabbix-web/AUTHORS
-Requires: /usr/share/doc/zabbix-web/COPYING
-Conflicts:  zabbix7.0 zabbix7.0-dbfiles-mysql zabbix7.0-selinux zabbix7.0-server zabbix7.0-server-mysql zabbix7.0-web zabbix7.0-web-mysql
-Conflicts:  zabbix8.0 zabbix8.0-dbfiles-mysql zabbix8.0-selinux zabbix8.0-server zabbix8.0-server-mysql zabbix8.0-web zabbix8.0-web-mysql
-Requires: zabbix-web-mysql >= 7.0.1
-Requires: zabbix-web >= 7.0.1
 Requires: sendxmpp
 Requires: smeserver-remoteuseraccess
+Requires: zabbix-sql-scripts
+
+# this force zabbix repo "7.0.X-release1.el8" vs EPEL "7.0.X-1.el8"
+Requires: zabbix-server-mysql >= 7.0.1-release1
+Requires: zabbix-web-mysql >= 7.0.1-release1
+Requires: zabbix-web >= 7.0.1-release1
+# this force pulling it from zabbix repo not from EPEL
+Requires: /usr/share/doc/zabbix-web/AUTHORS
+Requires: /usr/share/doc/zabbix-web/COPYING
+#Conflicts:  zabbix7.0 zabbix7.0-dbfiles-mysql zabbix7.0-selinux zabbix7.0-server zabbix7.0-server-mysql zabbix7.0-web zabbix7.0-web-mysql
+
 # for telegram bot
 Requires: python2-pysocks python2-requests 
-#python2-requests-oauthlib
 Requires: python3-pysocks python3-requests python3-requests-oauthlib
-Obsoletes: zabbix-server
+
+# avoid server and proxy on same machine
 Conflicts: smeserver-zabbix-proxy
+
 AutoReqProv: no
 
 %description
@@ -47,6 +50,9 @@ Zabbix is an entreprise-class open source distributed monitoring
 solution
 
 %changelog
+* Tue Sep 15 2026 Jean-Philippe Pialasse <jpp@koozali.org> 0.1-36.sme
+- tidy spec file to avoid dnf conflicts
+
 * Thu May 28 2026 Jean-Philippe Pialasse <jpp@koozali.org> 0.1-35.sme
 - import to SME11
 - use php 8.4, fix php-fpm, mariadb 11.4
